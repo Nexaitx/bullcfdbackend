@@ -1,9 +1,9 @@
 const User = require('../models/user');
 
 exports.register = async (req, res) => {
-  const { name, email, mobile } = req.body;
+  const { fullName, email, phone } = req.body;
 
-  if (!name || !email || !mobile) {
+  if (!fullName || !email || !phone) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
       return res.status(409).json({ message: 'User already exists' });
     }
 
-    const newUser = await User.create({ name, email, mobile });
+    const newUser = await User.create({ fullName, email, mobphoneile });
     res.status(201).json({ message: 'User registered successfully', user: newUser });
 
   } catch (err) {
