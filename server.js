@@ -16,29 +16,30 @@ dotenv.config();
 const app = express();
 
 /************ always-on server with self ping *****/
-const SELF_PING_URL = 'https://bullcfdbackend.onrender.com'; // replace with your real URL
+const SELF_PING_URL = 'https://bullcfdbackend.onrender.com';
 cron.schedule('*/14 * * * *', async () => {
   try {
-    const res = await axios.get(SELF_PING_URL);
+    await axios.get(SELF_PING_URL);
     console.log(`[PING] Self-pinged at ${new Date().toLocaleTimeString()}`);
   } catch (error) {
-    console.error('[PING] x Self-ping failed:', error.message);
+    console.error('[PING] ❌ Self-ping failed:', error.message);
   }
 });
 
 /********** CORS **********/
 const allowedOrigins = [
   'http://localhost:5173',
-    'http://localhost:3000',                   
-'https://bullcfdweb-ebon.vercel.app',       // your Vercel frontend
-  'https://bullcfdbackend.onrender.com' ];
+  'http://localhost:3000',
+  'https://bullcfdweb-ebon.vercel.app',
+  'https://bullcfdbackend.onrender.com'
+];
 
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-            console.error(`⛔ Blocked by CORS: ${origin}`);
+      console.error(` Blocked by CORS: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -74,5 +75,5 @@ sequelize.sync()
     });
   })
   .catch(err => {
-    console.error('Error connecting to MySQL:', err);
+    console.error('❌ Error connecting to MySQL:', err);
   });
