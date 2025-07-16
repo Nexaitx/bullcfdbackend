@@ -13,12 +13,15 @@ const options = {
     servers: [
       {
         url: 'http://localhost:3000',
-        description: 'Local server'
+        description: 'Local server',
+      },
+      {
+        url: 'https://bullcfdbackend.onrender.com',
+        description: 'Production server (Render)',
       },
     ],
   },
-  // Files containing annotations as above
-  apis: ['./routes/*.js'],
+  apis: ['./routes/*.js'], // Your route files for Swagger annotations
 };
 
 const swaggerSpec = swaggerJsdoc(options);
