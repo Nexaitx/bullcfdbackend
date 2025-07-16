@@ -29,14 +29,16 @@ cron.schedule('*/14 * * * *', async () => {
 /********** CORS **********/
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://bullcfdweb-ebon.vercel.app'
-];
+    'http://localhost:3000',                   
+'https://bullcfdweb-ebon.vercel.app',       // your Vercel frontend
+  'https://bullcfdbackend.onrender.com' ];
 
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+            console.error(`⛔ Blocked by CORS: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },

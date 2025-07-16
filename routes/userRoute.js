@@ -11,17 +11,17 @@
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - fullName
  *               - email
- *               - mobile
+ *               - phone
  *             properties:
- *               name:
+ *               fullName:
  *                 type: string
  *                 example: John Doe
  *               email:
  *                 type: string
  *                 example: john@example.com
- *               mobile:
+ *               phone:
  *                 type: string
  *                 example: +91-1234569870
  *     responses:

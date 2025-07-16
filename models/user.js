@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../config/db'); // ✅ import sequelize instance
 
 const User = sequelize.define('User', {
   id: {
@@ -22,7 +22,7 @@ const User = sequelize.define('User', {
   }
 }, {
   tableName: 'users',
-  timestamps: true
+  timestamps: false  // ✅ Set to false if your DB doesn't have createdAt/updatedAt
 });
 
 module.exports = User;
