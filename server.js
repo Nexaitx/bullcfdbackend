@@ -6,40 +6,53 @@ const sequelize = require('./config/db');
 const userRoutes = require('./routes/userRoute');
 const { swaggerUi, swaggerSpec } = require('./config/swagger');
 const cors = require('cors');
+const cron = require('node-cron');
+const axios = require('axios');
 
-/*******origin allow */
+// Load env first
+dotenv.config();
 
+// Initialize app early
+const app = express();
+
+/************ always-on server with self ping *****/
+const SELF_PING_URL = 'https://bullcfdbackend.onrender.com'; // replace with your real URL
+cron.schedule('*/14 * * * *', async () => {
+  try {
+    const res = await axios.get(SELF_PING_URL);
+    console.log(`[PING] Self-pinged at ${new Date().toLocaleTimeString()}`);
+  } catch (error) {
+    console.error('[PING] x Self-ping failed:', error.message);
+  }
+});
+
+/********** CORS **********/
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://bullcfdweb-ebon.vercel.app'];
+  'https://bullcfdweb-ebon.vercel.app'
+];
 
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow request
+      callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true, 
+  credentials: true,
 }));
 
-
-
-dotenv.config();
-
-const app = express();
-
-// Middleware
+/********** Middleware **********/
 app.use(bodyParser.json());
 
-// API Routes
+/********** Routes **********/
 app.use('/api', userRoutes);
 
-// Swagger Docs
+/********** Swagger Docs **********/
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Serve React Frontend
+/********** Serve React Frontend **********/
 const frontendPath = path.join(__dirname, 'frontend', 'build');
 app.use(express.static(frontendPath));
 
@@ -47,7 +60,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Start server after DB sync
+/********** DB Sync & Server Start **********/
 const PORT = process.env.PORT || 3000;
 
 sequelize.sync()
@@ -59,5 +72,5 @@ sequelize.sync()
     });
   })
   .catch(err => {
-    console.error('❌ Error connecting to MySQL:', err);
+    console.error('Error connecting to MySQL:', err);
   });
