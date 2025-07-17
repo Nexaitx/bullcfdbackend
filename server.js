@@ -30,7 +30,7 @@ cron.schedule('*/14 * * * *', async () => {
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  'https://bullcfdweb-ebon.vercel.app',
+  'https://bullcfdweb-ebon.vercel.app',       //Vercel frontend
   'https://bullcfdbackend.onrender.com'
 ];
 

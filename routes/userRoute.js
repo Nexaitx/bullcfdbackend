@@ -14,6 +14,7 @@
  *               - fullName
  *               - email
  *               - phone
+ *               - city
  *             properties:
  *               fullName:
  *                 type: string
@@ -24,6 +25,10 @@
  *               phone:
  *                 type: string
  *                 example: +91-1234569870
+ *               city:
+ *                   type: string
+ *                   example: Mumbai
+ * 
  *     responses:
  *       201:
  *         description: User registered successfully

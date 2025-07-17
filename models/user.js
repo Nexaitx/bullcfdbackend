@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // ✅ import sequelize instance
+const sequelize = require('../config/db'); // import sequelize instance
 
 const User = sequelize.define('User', {
   id: {
@@ -19,7 +19,12 @@ const User = sequelize.define('User', {
   phone: {
     type: DataTypes.STRING,
     allowNull: false
-  }
+  },
+   city: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  
 }, {
   tableName: 'users',
   timestamps: false  // ✅ Set to false if your DB doesn't have createdAt/updatedAt
