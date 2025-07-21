@@ -4,33 +4,35 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const sequelize = require('./config/db');
 const userRoutes = require('./routes/userRoute');
+const pingRoute = require('./routes/pingRoute'); // 👈 ADD THIS
 const { swaggerUi, swaggerSpec } = require('./config/swagger');
 const cors = require('cors');
 const cron = require('node-cron');
 const axios = require('axios');
 
-// Load env first
+// Load env
 dotenv.config();
 
-// Initialize app early
+// Initialize
 const app = express();
 
-/************ always-on server with self ping *****/
-const SELF_PING_URL = 'https://bullcfdbackend.onrender.com';
+// Self Ping
+const SELF_PING_URL = 'https://bullcfdbackend.onrender.com/api/ping';
+
 cron.schedule('*/14 * * * *', async () => {
   try {
-    await axios.get(SELF_PING_URL);
-    console.log(`[PING] Self-pinged at ${new Date().toLocaleTimeString()}`);
+    const res = await axios.get(SELF_PING_URL);
+    console.log(`[PING] ✅ Self-pinged at ${new Date().toLocaleTimeString()}: ${res.data}`);
   } catch (error) {
     console.error('[PING] ❌ Self-ping failed:', error.message);
   }
 });
 
-/********** CORS **********/
+// CORS
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
-  'https://bullcfdweb-ebon.vercel.app',       //Vercel frontend
+  'https://bullcfdweb-ebon.vercel.app',
   'https://bullcfdbackend.onrender.com'
 ];
 
@@ -46,34 +48,31 @@ app.use(cors({
   credentials: true,
 }));
 
-/********** Middleware **********/
+// Middleware
 app.use(bodyParser.json());
 
-/********** Routes **********/
+// Routes
 app.use('/api', userRoutes);
+app.use('/api', pingRoute); // LINE
 
-/********** Swagger Docs **********/
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-/********** Serve React Frontend **********/
+// React Build Serve
 const frontendPath = path.join(__dirname, 'frontend', 'build');
 app.use(express.static(frontendPath));
-
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-/********** DB Sync & Server Start **********/
+// Start
 const PORT = process.env.PORT || 3000;
-
-sequelize.sync()
-  .then(() => {
-    console.log('📦 Connected to MySQL database');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📘 Swagger docs: http://localhost:${PORT}/api-docs`);
-    });
-  })
-  .catch(err => {
-    console.error('❌ Error connecting to MySQL:', err);
+sequelize.sync().then(() => {
+  console.log('📦 Connected to MySQL database');
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📘 Swagger docs: http://localhost:${PORT}/api-docs`);
   });
+}).catch(err => {
+  console.error('❌ Error connecting to MySQL:', err);
+});
