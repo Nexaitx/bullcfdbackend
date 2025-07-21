@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const sequelize = require('./config/db');
 const userRoutes = require('./routes/userRoute');
-const pingRoute = require('./routes/pingRoute'); // 👈 ADD THIS
+const pingRoute = require('./routes/pingRoute'); //  ADD THIS
 const { swaggerUi, swaggerSpec } = require('./config/swagger');
 const cors = require('cors');
 const cron = require('node-cron');
@@ -19,12 +19,12 @@ const app = express();
 // Self Ping
 const SELF_PING_URL = 'https://bullcfdbackend.onrender.com/api/ping';
 
-cron.schedule('*/14 * * * *', async () => {
+cron.schedule('*/5 * * * *', async () => {
   try {
     const res = await axios.get(SELF_PING_URL);
     console.log(`[PING] ✅ Self-pinged at ${new Date().toLocaleTimeString()}: ${res.data}`);
   } catch (error) {
-    console.error('[PING] ❌ Self-ping failed:', error.message);
+    console.error('[PING]  Self-ping failed:', error.message);
   }
 });
 
