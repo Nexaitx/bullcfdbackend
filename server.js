@@ -33,7 +33,9 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
   'https://bullcfdweb-ebon.vercel.app',
-  'https://bullcfdbackend.onrender.com'
+  'https://bullcfdbackend.onrender.com',
+  'https://www.bullcfd.live',
+  'www.bullcfd.live'
 ];
 
 app.use(cors({
