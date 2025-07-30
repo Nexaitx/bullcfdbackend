@@ -8,14 +8,18 @@ exports.register = async (req, res) => {
   }
 
   try {
-    const userExists = await User.findOne({ where: { email } });
-    if (userExists) {
-      return res.status(409).json({ message: 'User already exists' });
-    }
+    // Mongoose syntax
+
+   
 
     const newUser = await User.create({ fullName, email, phone, city });
-    res.status(201).json({ message: 'User registered successfully', user: newUser });
+
+    res.status(201).json({
+      message: 'User registered successfully',
+      user: newUser,
+    });
   } catch (err) {
+    console.error("Registration error:", err);
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };

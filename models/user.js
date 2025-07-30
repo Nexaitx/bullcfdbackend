@@ -1,11 +1,11 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // import sequelize instance
+const sequelize = require('../config/db'); 
 
 const User = sequelize.define('User', {
-  id: {
-     type: DataTypes.UUID,
-  defaultValue: DataTypes.UUIDV4,
-  primaryKey: true
+id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
   },
   fullName: {
     type: DataTypes.STRING,
@@ -13,8 +13,8 @@ const User = sequelize.define('User', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+    allowNull: true,
+    unique: false
   },
   phone: {
     type: DataTypes.STRING,
@@ -22,12 +22,17 @@ const User = sequelize.define('User', {
   },
    city: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
+
+  // registerTime:{
+  //   type: DataTypes.DATE,
+  //   defaultValue: DataTypes.NOW
+  // },
   
 }, {
-  tableName: 'users',
-  timestamps: false  // ✅ Set to false if your DB doesn't have createdAt/updatedAt
+  tableName: 'bullcfdUser',
+  timestamps: true  // Set to false if your DB doesn't have createdAt/updatedAt
 });
 
 module.exports = User;
